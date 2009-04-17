@@ -1,0 +1,21 @@
+POE::Component::IRC::Plugin::POE::Knee
+======================================
+
+1.08	Fri Apr 17 22:45:03 BST 2009
+	- Import git repo
+	- bump to stable release
+
+1.06	Tue May 13 10:56:22 BST 2008
+	- Added LICENSE information
+
+1.04	Fri Apr  4 13:55:23 BST 2008
+	- Kwalitee fixes.
+
+1.02	Thu Nov  1 12:20:22 GMT 2007
+	- Updated Module::Install to 0.68
+
+1.01	Sun Aug 05 11:11:11 BST 2007
+	- Fixed abstract_from and build_requires in Makefile.PL
+
+1.00	Sun Oct 15 12:58:07 BST 2006
+	- Initial Release
