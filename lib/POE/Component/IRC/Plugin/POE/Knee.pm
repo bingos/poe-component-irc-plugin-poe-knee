@@ -1,5 +1,7 @@
 package POE::Component::IRC::Plugin::POE::Knee;
 
+#ABSTRACT: A POE::Component::IRC plugin that runs Acme::POE::Knee races.
+
 use strict;
 use warnings;
 use Time::HiRes qw(gettimeofday);
@@ -7,9 +9,6 @@ use Math::Random;
 use POE;
 use POE::Component::IRC::Plugin qw(:ALL);
 use POE::Component::IRC::Common qw(:ALL);
-use vars qw($VERSION);
-
-$VERSION = '1.08';
 
 sub new {
   my $package = shift;
@@ -22,11 +21,11 @@ sub new {
 sub PCI_register {
   my ($self,$irc) = @_;
   die "This plugin must be used with POE::Component::IRC::State or a subclass of that\n"
-  	unless $irc->isa('POE::Component::IRC::State');
+	  unless $irc->isa('POE::Component::IRC::State');
   $self->{irc} = $irc;
   $irc->plugin_register( $self, 'SERVER', qw(public) );
   $self->{session_id} = POE::Session->create(
-	object_states => [ 
+	object_states => [
 	   $self => [ qw(_shutdown _start _race_on _run) ],
 	],
   )->ID();
@@ -109,7 +108,7 @@ sub _run {
 	push @{ $self->{_progress} }, _stamp() . " " . $result;
 	my $race_result = delete $self->{_progress};
 	$self->{irc}->yield( '__send_event', 'irc_poeknee_results', $channel, $race_result );
-  	$self->{_race_in_progress} = 0;
+	  $self->{_race_in_progress} = 0;
 	return;
   }
   if ( $stage > $self->{_race_in_progress} ) {
@@ -120,16 +119,17 @@ sub _run {
   undef;
 }
 
-sub _stamp { 
+sub _stamp {
   return join('.', gettimeofday);
 }
 
-1;
-__END__
+qq[Ride the ponies];
 
-=head1 NAME
+=pod
 
-POE::Component::IRC::Plugin::POE::Knee - A POE::Component::IRC plugin that runs Acme::POE::Knee races.
+=for Pod::Coverage PCI_register PCI_unregister S_public
+
+=cut
 
 =head1 SYNOPSIS
 
@@ -186,7 +186,7 @@ POE::Component::IRC::Plugin::POE::Knee - A POE::Component::IRC plugin that runs 
 
 =head1 DESCRIPTION
 
-POE::Component::IRC::Plugin::POE::Knee, is a L<POE::Component::IRC> plugin that runs L<Acme::POE::Knee> style 
+POE::Component::IRC::Plugin::POE::Knee, is a L<POE::Component::IRC> plugin that runs L<Acme::POE::Knee> style
 horse races on IRC channels using the channel member list to generate the POE::Knees. >:)
 
 =head1 CONSTRUCTOR
@@ -216,31 +216,19 @@ a POE::Knee race is started.
 
 =head1 OUTPUT
 
-Apart from the output seen on the IRC channel where a POE::Knee race is currently underway, at the end of a race 
+Apart from the output seen on the IRC channel where a POE::Knee race is currently underway, at the end of a race
 the following 'irc' event is generated.
 
 =over
 
 =item C<irc_poeknee_results>
 
-Generated each time a POE::Knee race finishes. 
+Generated each time a POE::Knee race finishes.
 
   ARG0, the channel where the race was run;
   ARG1, an arrayref containing lots of potentially uninteresting data;
 
 =back
-
-=head1 AUTHOR
-
-Chris 'BinGOs' Williams
-
-Based on L<Acme::POE::Knee> by Jos Boumans and Rocco Caputo
-
-=head1 LICENSE
-
-Copyright E<copy> Chris Williams, Jos Boumans and Rocco Caputo.
-
-This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
